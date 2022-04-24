@@ -13,6 +13,7 @@ class Sudoku:
         self.data = data
         if (self.data == False):
             self.data = self.import_csv()
+        self.errors = 0
 
         self.spaces = []
         self.empty_board = self.create_empty_board(self.data)
@@ -81,15 +82,23 @@ class Sudoku:
         for i in range(9):
             temp = []
             for j in range(9):
-                temp.append(tk.Text(window, height=1, width=2,
-                            font=("Arial", 25)))
+
+                if (self.data[i][j][1] == 0):
+                    temp.append(tk.Text(window, height=1, width=2,
+                                        font=("Arial bold", 25)))
+                else:
+                    temp.append(tk.Text(window, height=1, width=2,
+                                        font=("Arial", 25)))
             self.spaces.append(temp)
+
+        print(self.spaces)
 
         # insert values into the text boxes based on data array
         self.insert_values()
 
         for row in range(len(self.spaces)):
             for col in range(len(self.spaces[row])):
+                self.spaces[row][col].tag_add("tag", "1.0")
                 self.spaces[row][col].grid(row=row, column=col)
 
         save_game = tk.Button(window, text="Save", command=self.create_csv)
@@ -103,13 +112,14 @@ class Sudoku:
         window.mainloop()
 
     def insert_values(self):
-
         for row in range(len(self.spaces)):
             for col in range(len(self.spaces[row])):
                 if (self.data[row][col][0] == 0):
                     continue
                 self.spaces[row][col].insert(
                     tk.END, str(self.data[row][col][0]))
+                self.spaces[row][col].config(
+                    state='disabled')
 
         # a2.insert(tk.END, "asdasd")
 
@@ -117,7 +127,6 @@ class Sudoku:
         return self.spaces[row][col].get("1.0", "end")
 
     def evaluate_space(self, row, col):
-        self.spaces[row][col].tag_add("tag", "1.0")
         if (self.get_space_input(row, col) == "\n"):
             return
         elif (self.data[row][col][1] == 0):
@@ -128,6 +137,7 @@ class Sudoku:
                 "tag", background="green")
         else:
             self.spaces[row][col].tag_config("tag", background="red")
+            self.errors += 1
 
     def check_game(self):
         for row in range(len(self.spaces)):
