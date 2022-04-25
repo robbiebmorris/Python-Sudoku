@@ -2,6 +2,7 @@
 # create your own sodoku boards, generate them automatically, and play!
 import csv
 import tkinter as tk
+import time
 
 
 class Sudoku:
@@ -76,7 +77,7 @@ class Sudoku:
     # gui stuff!
 
     def create_window(self):
-        window = tk.Tk()
+        self.window = tk.Tk()
 
         # create the empty text boxes of grid
         for i in range(9):
@@ -84,14 +85,12 @@ class Sudoku:
             for j in range(9):
 
                 if (self.data[i][j][1] == 0):
-                    temp.append(tk.Text(window, height=1, width=2,
+                    temp.append(tk.Text(self.window, height=1, width=2,
                                         font=("Arial bold", 25)))
                 else:
-                    temp.append(tk.Text(window, height=1, width=2,
+                    temp.append(tk.Text(self.window, height=1, width=2,
                                         font=("Arial", 25)))
             self.spaces.append(temp)
-
-        print(self.spaces)
 
         # insert values into the text boxes based on data array
         self.insert_values()
@@ -101,19 +100,28 @@ class Sudoku:
                 self.spaces[row][col].tag_add("tag", "1.0")
                 self.spaces[row][col].grid(row=row, column=col)
 
-        save_game = tk.Button(window, text="Save", command=self.create_csv)
-        check_game = tk.Button(window, text="Done", command=self.check_game)
-        exit_game = tk.Button(window, text="Exit", command=window.destroy)
+        save_game = tk.Button(self.window, text="Export",
+                              command=self.create_csv)
+        import_game = tk.Button(
+            self.window, text="Import", command=self.import_csv)
+        check_game = tk.Button(self.window, text="Done",
+                               command=self.check_game)
+        exit_game = tk.Button(self.window, text="Exit",
+                              command=self.window.destroy)
 
         save_game.grid(row=9, column=3)
+        import_game.grid(row=9, column=5)
         check_game.grid(row=9, column=4)
-        exit_game.grid(row=9, column=5)
+        exit_game.grid(row=10, column=4)
 
-        window.mainloop()
+        self.window.mainloop()
 
     def insert_values(self):
         for row in range(len(self.spaces)):
             for col in range(len(self.spaces[row])):
+                # if ((row == 3 or 4 or 5) and (col == 0 or 1 or 2 or 6 or 7 or 8)):
+                #     self.spaces[row][col].tag_config("tag", background="gray")
+
                 if (self.data[row][col][0] == 0):
                     continue
                 self.spaces[row][col].insert(
@@ -121,17 +129,18 @@ class Sudoku:
                 self.spaces[row][col].config(
                     state='disabled')
 
-        # a2.insert(tk.END, "asdasd")
-
     def get_space_input(self, row, col):
         return self.spaces[row][col].get("1.0", "end")
 
     def evaluate_space(self, row, col):
         if (self.get_space_input(row, col) == "\n"):
+            self.errors += 1
             return
+
         elif (self.data[row][col][1] == 0):
             self.spaces[row][col].tag_config(
                 "tag", background="gray")
+
         elif (int(self.get_space_input(row, col)) == self.data[row][col][1]):
             self.spaces[row][col].tag_config(
                 "tag", background="green")
@@ -143,7 +152,23 @@ class Sudoku:
         for row in range(len(self.spaces)):
             for col in range(len(self.spaces[row])):
                 self.evaluate_space(row, col)
-        print("finished checking game")
+
+        pop_up = tk.Toplevel(self.window)
+        pop_up.geometry("250x170")
+
+        if (self.errors == 0):
+            mistakes = tk.Label(pop_up, text="You have 0 incorrect spaces!")
+            win = tk.Label(pop_up, text="You win!")
+            mistakes.pack(pady=20)
+            win.pack(pady=20)
+        else:
+            mistakes = tk.Label(
+                pop_up, text="You have " + str(self.errors) + " incorrect spaces.")
+            win = tk.Label(pop_up, text="Try again")
+            mistakes.pack(pady=20)
+            win.pack(pady=20)
+
+        self.errors = 0
 
 
 def main():
