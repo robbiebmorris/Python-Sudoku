@@ -15,15 +15,12 @@ class Sudoku:
         if (self.data == False):
             self.data = self.import_csv()
         self.errors = 0
-
-        self.spaces = []
         self.empty_board = self.create_empty_board(self.data)
-        self.create_window()
-
+        self.rules_window()
     # could add a "create sodoku" function to create random games!
     # printing it to csv to save a nice board, wordle style
 
-    def create_csv(self):
+    def export_csv(self):
         file = open(self.file_location, 'w', newline='')
         csvwriter = csv.writer(file)
         for row in self.data:
@@ -48,6 +45,10 @@ class Sudoku:
                 arr.append(row)
         file.close()
         return arr
+
+    def import_game(self):
+        self.data = self.import_csv()
+        self.create_game()
 
     def set_data(self, data):
         self.data = data
@@ -75,9 +76,10 @@ class Sudoku:
         return self.empty_board
 
     # gui stuff!
-
-    def create_window(self):
+    def create_game(self):
+        self.window.destroy()
         self.window = tk.Tk()
+        self.spaces = []
 
         # create the empty text boxes of grid
         for i in range(9):
@@ -101,9 +103,9 @@ class Sudoku:
                 self.spaces[row][col].grid(row=row, column=col)
 
         save_game = tk.Button(self.window, text="Export",
-                              command=self.create_csv)
+                              command=self.export_csv)
         import_game = tk.Button(
-            self.window, text="Import", command=self.import_csv)
+            self.window, text="Import", command=self.import_game)
         check_game = tk.Button(self.window, text="Done",
                                command=self.check_game)
         exit_game = tk.Button(self.window, text="Exit",
@@ -113,6 +115,23 @@ class Sudoku:
         import_game.grid(row=9, column=5)
         check_game.grid(row=9, column=4)
         exit_game.grid(row=10, column=4)
+
+        self.window.mainloop()
+
+    def rules_window(self):
+        self.window = tk.Tk()
+        self.window.geometry("550x250")
+
+        rules_text = tk.Text(self.window, height=12,
+                             width=200)
+        rules_text.insert(
+            'end', "Welcome to Sodoku!\n\nFill in the empty boxes according to traditional Sodoku rules-rows, columns and 3x3 squares must contain unique numbers!\n\nA variety of buttons can be found below the board:\nDone: use this to check if your solution is correct!\nInput: Use this to import new sodoku games from a CSV file!\nExport: Export the current sodoku game to a CSV file!\nExit: Leave the game :(\n\nClick Start to begin!")
+        rules_text.config(state='disabled')
+        start_game = tk.Button(self.window, text="Start!",
+                               command=self.create_game)
+
+        rules_text.pack(pady=10, padx=20)
+        start_game.pack(pady=2)
 
         self.window.mainloop()
 
@@ -194,7 +213,7 @@ def main():
 
     obj = Sudoku('data.csv')
 
-    obj.create_csv()
+    # obj.export_csv()
     # csv = obj.import_csv()
 
     # print(obj.get_empty_board())
