@@ -77,7 +77,7 @@ Here's an example of how to use the Sudoku game:
 import csv
 import tkinter as tk
 
-# Copy the code for the Sudoku class
+#...
 
 def main():
     sudoku = Sudoku(file_location="data.csv")
