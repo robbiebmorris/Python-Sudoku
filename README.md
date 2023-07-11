@@ -38,9 +38,7 @@ To play the Sudoku game, follow these steps:
    import tkinter as tk
    ```
 
-2. Copy the code for the `Sudoku` class into your Python script or notebook.
-
-3. Create an instance of the `Sudoku` class:
+2. Create an instance of the `Sudoku` class:
 
    ```python
    sudoku = Sudoku(file_location="data.csv", data=board_data)
@@ -49,7 +47,7 @@ To play the Sudoku game, follow these steps:
    - `file_location` (optional): The path to the CSV file containing a Sudoku puzzle. If not specified, a default puzzle will be used.
    - `data` (optional): A 2D array of tuples representing the Sudoku puzzle. Each tuple consists of two values: the given value and the correct value. If not specified, the puzzle will be imported from the CSV file.
 
-4. Run the Sudoku game by calling the `main()` function:
+3. Run the Sudoku game by calling the `main()` function:
 
    ```python
    sudoku.main()
@@ -57,18 +55,18 @@ To play the Sudoku game, follow these steps:
 
    This will open a GUI window displaying the Sudoku board.
 
-5. Interact with the Sudoku game by entering numbers into the empty spaces on the board.
+4. Interact with the Sudoku game by entering numbers into the empty spaces on the board.
 
    - The given values in the puzzle are displayed in gray and cannot be modified.
    - Press the "Done" button to check your solution.
    - Incorrect spaces will turn red, and correct spaces will turn green.
    - The number of incorrect spaces will be displayed in a pop-up window.
 
-6. You can export the current Sudoku game to a CSV file by clicking the "Export" button.
+5. You can export the current Sudoku game to a CSV file by clicking the "Export" button.
 
-7. If you want to import a new Sudoku game from a CSV file, click the "Import" button and select the file.
+6. If you want to import a new Sudoku game from a CSV file, click the "Import" button and select the file.
 
-8. To exit the game, click the "Exit" button or close the window.
+7. To exit the game, click the "Exit" button or close the window.
 
 ## Example
 
