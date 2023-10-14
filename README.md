@@ -18,7 +18,7 @@ Make sure you have the following dependencies installed:
 1. Clone the repository:
 
    ```shell
-   git clone <repository_url>
+   git clone https://github.com/robbiebmorris/Python-Sudoku
    ```
 
 2. Navigate to the project directory:
